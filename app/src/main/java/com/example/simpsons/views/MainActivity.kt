@@ -3,17 +3,17 @@ package com.example.simpsons.views
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.simpsons.databinding.ActivityMainBinding
 import com.example.simpsons.viewmodels.MainViewModel
 import com.example.simpsons.views.adapter.CharacterAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityMainBinding
     private val binding get() = _binding
-    private lateinit var viewModel: MainViewModel
+    private val mviewModel: MainViewModel by viewModel()
     private lateinit var adapter: CharacterAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,8 +22,7 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.getCharacters()
+        mviewModel.getCharacters()
 
         onClick()
         setupRecycleView()
@@ -34,16 +33,16 @@ class MainActivity : AppCompatActivity() {
     private fun onClick() {
         binding.tilSearch.setEndIconOnClickListener{
             if (binding.tietSearch.text.toString() == ""){
-                viewModel.getCharacters()
+                mviewModel.getCharacters()
             } else {
-                viewModel.getCharacter(binding.tietSearch.text.toString().trim())
+                mviewModel.getCharacter(binding.tietSearch.text.toString().trim())
             }
         }
     }
 
     private fun observer() {
-        viewModel.listCharacters.observe(this, Observer {
-           adapter.listaPersonajes = it
+        mviewModel.listCharacters.observe(this, Observer {
+           adapter.listCharacters = it
             adapter.notifyDataSetChanged()
         })
     }

@@ -15,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class CharacterAdapter(
     val context: Context,
-    var listaPersonajes: List<Characters>
+    var listCharacters: List<Characters>
 ): RecyclerView.Adapter<CharacterAdapter.ViewHolder>() {
 
 
@@ -26,11 +26,11 @@ class CharacterAdapter(
     }
 
     override fun getItemCount(): Int {
-        return listaPersonajes.size
+        return listCharacters.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val character = listaPersonajes[position]
+        val character = listCharacters[position]
 
         Glide
             .with(context)

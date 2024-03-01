@@ -4,13 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.simpsons.core.RetrofitClient
 import com.example.simpsons.models.Characters
+import com.example.simpsons.network.WebService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel: ViewModel() {
+class MainViewModel(
+    private val retrofitClient: WebService
+): ViewModel() {
 
     private var _listCharacters = MutableLiveData<List<Characters>>()
     val listCharacters: LiveData<List<Characters>> get() = _listCharacters
@@ -18,7 +20,7 @@ class MainViewModel: ViewModel() {
     fun getCharacters(){
 
         viewModelScope.launch(Dispatchers.IO){
-            val response = RetrofitClient.webService.getCharacters()
+            val response = retrofitClient.getCharacters()
             withContext(Dispatchers.Main){
                 _listCharacters.value = response.body()
             }
@@ -28,7 +30,7 @@ class MainViewModel: ViewModel() {
     fun getCharacter(person: String){
 
         viewModelScope.launch(Dispatchers.IO){
-            val response = RetrofitClient.webService.getCharacter(person)
+            val response = retrofitClient.getCharacter(person)
             withContext(Dispatchers.Main){
                 _listCharacters.value = response.body()
             }
